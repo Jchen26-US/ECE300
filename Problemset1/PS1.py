@@ -8,14 +8,12 @@ def plotComplex(array, title):
     ax = plt.subplot()
     ax.scatter(x,y)
     ax.set_aspect('equal', adjustable='box')
-    plt.xlabel("Real")
-    plt.ylabel("Imag")
     plt.title(title)
     plt.grid()
     plt.savefig((title + ".jpg"))
     plt.close()
 
-#A)
+#A) --------------------------------
 # 1. QPSK
 dmin = 1.0
 
@@ -45,12 +43,12 @@ plotComplex(psk8, "psk8")
 plotComplex(qam16, "qam16")
 plotComplex(qam32, "qam32")
 
-testarr = np.array([[2+1j,2+1j,2,2],[2,2,3,2],[2,2,2,2]])
-print(testarr)
-print(np.absolute( testarr))
+#testarr = np.array([[2+1j,2+1j,2,2],[2,2,3,2],[2,2,2,2]])
+#print(testarr)
+#print(np.absolute( testarr))
 #Compute Energy per bit: [ 1/log2(M) ]* Es
 
-#B)
+#B)-------------------------------
 
 def computeEb(array):
     M = array.size
@@ -63,10 +61,24 @@ Eb4 = computeEb(qpsk)
 Eb8 = computeEb(psk8) 
 Eb16 = computeEb(qam16)
 Eb32 = computeEb(qam32)
-
-#C)
-def computeN(array):
+print("Energy per bit [QPSK, 8PSK, 16QAM, 32QAM] : ",Eb4, Eb8, Eb16,Eb32)
+#Energy per bit [4,8,16,32] :  0.25 0.5690355937288493 0.6250000000000001 1.0
+#C)-------------------------------------
+def computeN(array): 
     return (np.log2(array.size)/ 2) #dimension for all is 2
 
 nqpsk = computeN(qpsk)
 n8psk = computeN(psk8)
+n16qam = computeN(qam16)
+n32qam = computeN(qam32)
+print("bits/ dimension [QPSK, 8PSK, 16QAM, 32QAM] :", nqpsk, n8psk, n16qam, n32qam)
+#bits/ dimension [4, 8, 16, 32] : 1.0 1.5 2.0 2.5
+
+#D) ----------------------------
+#The most power efficient is QPSK with an energy per bit of .25
+
+#E) ------------------------------
+#The most spectrally efficient is 32QAM with 2.5 bits per dimension
+
+#F)????????????????????
+#
