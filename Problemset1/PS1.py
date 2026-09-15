@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+#Question 1
+
 #plotter function
 def plotComplex(array, title):
     x = [ele.real for ele in array]
@@ -15,7 +17,7 @@ def plotComplex(array, title):
 
 #A) --------------------------------
 # 1. QPSK
-dmin = 1.0
+dmin = 1
 
 qpsk = (dmin / np.sqrt(2)) * np.exp(1j * (np.pi/4 + np.arange(4) * np.pi/2))
 
@@ -38,6 +40,12 @@ grid36 = (I36 + 1j * Q36).flatten()
 # Exclude the 4 corners: abs(z)^2 == 2.5^2 + 2.5^2 = 12.5
 qam32 = grid36[np.abs(grid36)**2 < 12.4]
 
+print("qpsk-----------------------\n", qpsk)
+print("psk8-----------------------\n", psk8)
+print("qam16----------------------\n", qam16)
+print("qam32----------------------\n", qam32)
+
+#confirmation plots
 plotComplex(qpsk, "qpsk")
 plotComplex(psk8, "psk8")
 plotComplex(qam16, "qam16")
@@ -82,3 +90,36 @@ print("bits/ dimension [QPSK, 8PSK, 16QAM, 32QAM] :", nqpsk, n8psk, n16qam, n32q
 
 #F)????????????????????
 #
+
+
+#Question2 part (f)
+#X(f) = A/2W [ 1 + cos(pif/W)] II(f/2W)
+#sinc(E) = sin(piE)/piE
+#x(t) = A [ sinc(2Wt)  + 1/2 sinc(2W(t+1/2W)) + 1/2 sinc(2W(t - 1/2W))]
+A = 1
+W = 1
+#change 3rd parameter for higher definition, I used 
+f = np.linspace(-2*W, 2*W, 1_000_000)
+t = np.linspace(-4*W, 4*W, 1_000_000)
+def rect(x, W):
+    return np.where(np.abs(x) <= W, 1, 0)
+
+XF  = (A/(2*W)) * (1 + np.cos(np.pi * f / (W))) * rect(f, W)
+
+def sinc(x):
+    return (np.sin(np.pi * x)/(np.pi * x))
+
+xt = A * (sinc(2*W*t) + 1/2 * sinc(2*W*(t + 1/(2*W))) + 1/2 * sinc(2*W*( t - 1/(2*W))))
+
+fig1,ax1= plt.subplots()
+
+ax1.plot(f,XF)
+plt.grid()
+plt.title("X(f)")
+plt.savefig("X(f).jpg")
+
+fig2,ax2  = plt.subplots()
+ax2.plot(t,xt)
+plt.grid()
+plt.title("x(t)")
+plt.savefig("x(t).jpg")
