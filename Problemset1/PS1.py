@@ -45,16 +45,11 @@ print("psk8-----------------------\n", psk8)
 print("qam16----------------------\n", qam16)
 print("qam32----------------------\n", qam32)
 
-#confirmation plots
+#plots
 plotComplex(qpsk, "qpsk")
 plotComplex(psk8, "psk8")
 plotComplex(qam16, "qam16")
 plotComplex(qam32, "qam32")
-
-#testarr = np.array([[2+1j,2+1j,2,2],[2,2,3,2],[2,2,2,2]])
-#print(testarr)
-#print(np.absolute( testarr))
-#Compute Energy per bit: [ 1/log2(M) ]* Es
 
 #B)-------------------------------
 
