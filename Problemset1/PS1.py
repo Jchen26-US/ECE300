@@ -39,7 +39,7 @@ grid36 = (I36 + 1j * Q36).flatten()
 
 # Exclude the 4 corners: abs(z)^2 == 2.5^2 + 2.5^2 = 12.5
 qam32 = grid36[np.abs(grid36)**2 < 12.4]
-
+print("1A)------------------------")
 print("qpsk-----------------------\n", qpsk)
 print("psk8-----------------------\n", psk8)
 print("qam16----------------------\n", qam16)
@@ -69,7 +69,8 @@ Eb4 = computeEb(qpsk)
 Eb8 = computeEb(psk8) 
 Eb16 = computeEb(qam16)
 Eb32 = computeEb(qam32)
-print("Energy per bit [QPSK, 8PSK, 16QAM, 32QAM] : ",Eb4, Eb8, Eb16,Eb32)
+print(f"""1B------------------\n 
+    Energy per bit [QPSK, 8PSK, 16QAM, 32QAM] : {Eb4} {Eb8} {Eb16} {Eb32}""")
 #Energy per bit [4,8,16,32] :  0.25 0.5690355937288493 0.6250000000000001 1.0
 #C)-------------------------------------
 def computeN(array): 
@@ -79,26 +80,36 @@ nqpsk = computeN(qpsk)
 n8psk = computeN(psk8)
 n16qam = computeN(qam16)
 n32qam = computeN(qam32)
-print("bits/ dimension [QPSK, 8PSK, 16QAM, 32QAM] :", nqpsk, n8psk, n16qam, n32qam)
+print(f"""1C)----------------------------------
+    bits/ dimension [QPSK, 8PSK, 16QAM, 32QAM] : {nqpsk} {n8psk} {n16qam} {n32qam}""")
 #bits/ dimension [4, 8, 16, 32] : 1.0 1.5 2.0 2.5
 
 #D) ----------------------------
-#The most power efficient is QPSK with an energy per bit of .25
+print("""1D---------------------------------------------------\n
+    The most power efficient is QPSK with an energy per bit of .25\n""")
 
 #E) ------------------------------
-#The most spectrally efficient is 32QAM with 2.5 bits per dimension
+print("""1E-----------------------------\n
+      The most spectrally efficient is 32QAM with 2.5 bits per dimension\n""")
 
-#F)????????????????????
-#
+#F)
+print("1F)----------------------------------------")
+psk16 = 1 / (2 * np.sin(np.pi / 16)) * np.exp(1j * 2 * np.pi * np.arange(16) / 16) #psk16 with dmin1
+plotComplex(psk16, "psk16")
+Eb16psk = computeEb(psk16)
+N16psk = computeN(psk16)
+print(f"\tEnergy per bit (16-PSK) {Eb16psk} \t bits/dimension(16-PSK): {N16psk}\n\tEnergy per bit (32-QAM) {Eb32} \t bits/dimension(32-QAM): {n32qam}\n")
+print("No, it is not true that in every case a higher spectral efficiency corresponds to a higher power requirement. \nFor example, 32-QAM is more spectrally efficient compared to 16-PSK. However, it has a lower Energy per bit.")
 
 
 #Question2 part (f)
 #X(f) = A/2W [ 1 + cos(pif/W)] II(f/2W)
 #sinc(E) = sin(piE)/piE
 #x(t) = A [ sinc(2Wt)  + 1/2 sinc(2W(t+1/2W)) + 1/2 sinc(2W(t - 1/2W))]
+print("2F)-----------------------------------------------")
 A = 1
 W = 1
-#change 3rd parameter for higher definition, I used 
+#change 3rd parameter for higher num of points, 1_000_000 should be enough
 f = np.linspace(-2*W, 2*W, 1_000_000)
 t = np.linspace(-4*W, 4*W, 1_000_000)
 def rect(x, W):
@@ -123,3 +134,4 @@ ax2.plot(t,xt)
 plt.grid()
 plt.title("x(t)")
 plt.savefig("x(t).jpg")
+plt.show()
